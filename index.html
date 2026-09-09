@@ -103,19 +103,19 @@ tick: function() {
 </head>
 <body style='margin : 0px; overflow: hidden;'>
     <div style='top: 10px;text-align: center; font-family: Gill Sans; z-index: 1; color: white'>
-        Agentic Architecture AR Visualization<br>
-        Try pinching and swiping (left/right) <br>
-        to move the model!
+        Senior Studio<br>
+        Swipe (left/right) <br>
+        to move the model <br> Pinch to scale the model
       </div>
   <a-scene embedded arjs>
     <a-assets>
       <a-asset-item
             id="AgentModel"
-            src="Agentic_Architecture_AR2.glb">
+            src="Flower_Spin1.glb">
       </a-asset-item>
     </a-assets>
       <!-- define a marker for the model to track -->
-     <a-marker type='pattern' url='pattern-BotTrackRef1.patt'>
+     <a-marker type='pattern' url='Backyard_Test.patt'>
            <!-- use your gltf model -->
       <a-entity gltf-model="#AgentModel" 
                 animation-mixer="loop:repeat"
@@ -125,15 +125,6 @@ tick: function() {
                 controller></a-entity>
       </a-marker>
     
-         <a-marker type='pattern' url='pattern-BotTrack2.patt'>
-           <!-- use your gltf model -->
-      <a-entity gltf-model="#AgentModel" 
-                animation-mixer="loop:repeat"
-                position = "0 0 0"
-                scale = "7 7 7"
-                rotation = "-90 0 0"
-                controller></a-entity>
-      </a-marker>
       
 <!-- Optional: Add more trackers and models -->
       
