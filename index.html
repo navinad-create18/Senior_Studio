@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Strategy Agentic Architecture</title>
+ <!-- Import A-Frame Library -->
+<script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+<!-- Import AR.js Library -->
+<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+<!-- Import Hammer.js Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js" integrity="sha512-UXumZrZNiOwnTcZSHLOfcTs0aos2MzBWHXOHOuB0J/R44QB0dwY5JgfbvljXcklVf65Gc4El6RjZ+lnwd2az2g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    
+    //script for rotation and scale functions
+AFRAME.registerComponent("controller", {
+  init: function () {
+    //ensures the model loads but isn't visible yet
+    this.modelVisible = false;
+    //this is null so that the user can't interact before the model is loaded
+    this.mesh = null;
+
+    // the marker is the parent of the model
+    this.marker = this.el.parentEl;
+      
+    //tracking the marker
+    this.marker.addEventListener("markerFound", () => this.modelVisible = true);
+    this.marker.addEventListener("markerLost", () => this.modelVisible = false);
+
+    // changed this to model-loaded to load both models instead of just one
+    this.el.addEventListener("model-loaded", (evt) => {
+      this.mesh = evt.detail.model;
+        const model = evt.detail.model;
+      const animations = model.animations || [];
+
+      console.log("Animation Clips:");
+      console.log(animations);
+
+      animations.forEach((clip, i) => {
+        console.log(
+          `${i}: ${clip.name} (${clip.duration.toFixed(2)}s)`
+        );
+      });
+    });
+
+    // attach Hammer to canvas relative to the html setup -- a-scene is canvas
+    const hammertime = new Hammer(this.el.sceneEl.canvas);
+    // draws on hammertime pinch gesture
+    hammertime.get('pinch').set({ enable: true });
+    //scale of object is what is set in html below
+    var startScale = 1;
+    hammertime.on("pinchstart", (ev) => {
+    // the ! means opposite of null, so when mesh is shown pinch is enabled
+      if (!this.mesh) return;
+      startScale = this.mesh.scale.x;
+    });
+
+    hammertime.on("pinchmove", (ev) => {
+      if (!this.modelVisible || !this.mesh) return;
+
+    //changed line 30 of the referenced code because the Scalar part caused jittering
+      const newScale = startScale * ev.scale;
+    //this sets the scale without any other math
+      this.mesh.scale.set(newScale, newScale, newScale);
+    });
+
+   // rotation
+    // pan left/right for rotation
+    this.isPanning = false;
+    hammertime.on("panleft", () => {
+        if (!this.modelVisible) return;
+        this.isPanning = true
+        this.mesh.rotation.y -= 4 * Math.PI / 360;
+    })
+
+    hammertime.on("panright", () => {
+        if (!this.modelVisible) return;
+        this.isPanning = true
+        this.mesh.rotation.y += 4 * Math.PI / 360;
+    })
+    hammertime.on("panend", () => this.isPanning = false)
+    hammertime.on("pancancel", () => this.isPanning = false)
+
+    hammertime.on("swipeleft",  ({velocity}) => {
+        if (!this.modelVisible) return;
+        this.swipeVelocity = velocity
+    })
+    hammertime.on("swiperight", ({velocity}) => {
+        if (!this.modelVisible) return;
+        this.swipeVelocity = velocity
+    })
+},
+tick: function() {
+    if (!(this.modelVisible && this.swipeVelocity &&!this.isPanning)) return;
+    this.mesh.rotation.y += this.swipeVelocity * 4 * Math.PI / 360;
+    this.swipeVelocity *= 0.93;
+    if (Math.abs(this.swipeVelocity) <= 0.1) this.swipeVelocity = 0;
+}
+});
+    
+</script>
+<!-- Animation Script for GLB -->
+<script src="animation-mixer.js"></script>
+    
+</head>
+<body style='margin : 0px; overflow: hidden;'>
+    <div style='top: 10px;text-align: center; font-family: Gill Sans; z-index: 1; color: white'>
+        Agentic Architecture AR Visualization<br>
+        Try pinching and swiping (left/right) <br>
+        to move the model!
+      </div>
+  <a-scene embedded arjs>
+    <a-assets>
+      <a-asset-item
+            id="AgentModel"
+            src="Agentic_Architecture_AR2.glb">
+      </a-asset-item>
+    </a-assets>
+      <!-- define a marker for the model to track -->
+     <a-marker type='pattern' url='pattern-BotTrackRef1.patt'>
+           <!-- use your gltf model -->
+      <a-entity gltf-model="#AgentModel" 
+                animation-mixer="loop:repeat"
+                position = "0 0.5 0"
+                scale = "7 7 7"
+                rotation = "0 0 0"
+                controller></a-entity>
+      </a-marker>
+    
+         <a-marker type='pattern' url='pattern-BotTrack2.patt'>
+           <!-- use your gltf model -->
+      <a-entity gltf-model="#AgentModel" 
+                animation-mixer="loop:repeat"
+                position = "0 0 0"
+                scale = "7 7 7"
+                rotation = "-90 0 0"
+                controller></a-entity>
+      </a-marker>
+      
+<!-- Optional: Add more trackers and models -->
+      
+      <!-- define a camera which will move according to the marker position -->
+      <a-entity camera></a-entity>
+  
+  </a-scene>
+</body>
+</html>
