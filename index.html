@@ -119,7 +119,7 @@ tick: function() {
       </a-asset-item>
       <a-asset-item
             id="AgentModel3"
-            src="Abstract_Animation_StretchedCircle.glb">
+            src="AbstractAnimations3.glb">
       </a-asset-item>
     </a-assets>
       <!-- define a marker for the model to track -->
@@ -127,8 +127,8 @@ tick: function() {
            <!-- use your gltf model -->
       <a-entity gltf-model="#AgentModel" 
                 animation-mixer="loop:repeat"
-                position = "0.2 -4 -4"
-                scale = "0.4 0.4 0.4"
+                position = "0.2 -4 -1"
+                scale = "0.7 0.7 0.7"
                 rotation = "0 -90 0"
                 controller></a-entity>
       </a-marker>
@@ -137,11 +137,11 @@ tick: function() {
       <a-entity gltf-model="#AgentModel2" 
                 animation-mixer="loop:repeat"
                 position = "0.2 -1 -1"
-                scale = "0.3 0.3 0.3"
+                scale = "0.7 0.7 0.7"
                 rotation = "0 -90 0"
                 controller></a-entity>
       </a-marker>
-    <a-marker type='pattern' url='Abstract3.patt'>
+    <a-marker type='pattern' url='pattern-Abstract3.patt'>
            <!-- use your gltf model -->
       <a-entity gltf-model="#AgentModel3" 
                 animation-mixer="loop:repeat"
