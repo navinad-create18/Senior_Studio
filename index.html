@@ -113,14 +113,6 @@ tick: function() {
             id="AgentModel"
             src="Bird_and_Seed_Test.glb">
       </a-asset-item>
-      <a-asset-item
-            id="AgentModel2"
-            src="Abstract_Animation_Bubbles.glb">
-      </a-asset-item>
-      <a-asset-item
-            id="AgentModel3"
-            src="AbstractAnimations3.glb">
-      </a-asset-item>
     </a-assets>
       <!-- define a marker for the model to track -->
      <a-marker type='pattern' url='pattern-Digital.patt'>
@@ -130,24 +122,6 @@ tick: function() {
                 position = "0 0 0"
                 scale = "0.7 0.7 0.7"
                 rotation = "0 0 0"
-                controller></a-entity>
-      </a-marker>
-    <a-marker type='pattern' url='pattern-Abstract1.patt'>
-           <!-- use your gltf model -->
-      <a-entity gltf-model="#AgentModel2" 
-                animation-mixer="loop:repeat"
-                position = "0.2 -1 -1"
-                scale = "0.1 0.1 0.1"
-                rotation = "0 -90 0"
-                controller></a-entity>
-      </a-marker>
-    <a-marker type='pattern' url='pattern-Abstract3.patt'>
-           <!-- use your gltf model -->
-      <a-entity gltf-model="#AgentModel3" 
-                animation-mixer="loop:repeat"
-                position = "0 -1 0"
-                scale = "0.2 0.2 0.2"
-                rotation = "0 -90 0"
                 controller></a-entity>
       </a-marker>
     
